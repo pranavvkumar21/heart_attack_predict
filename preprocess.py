@@ -28,7 +28,7 @@ def savefile(**kwargs):
         np.save(key+".npy",File)
 
 def train_data(model, X, Y):
-    opt = keras.optimizers.Adam(learning_rate=0.000001)
+    opt = keras.optimizers.Adam(learning_rate=0.000003)
     model.compile(optimizer=opt,
                   loss=tf.keras.losses.BinaryCrossentropy(),
                   metrics=['accuracy'])
@@ -42,15 +42,16 @@ def predict(model,X,Y):
         if val > 0.5: predictions[idx] = 1
         else: predictions[idx] = 0
         if Y[idx] != predictions[idx]: counter +=1
-    print(predictions[0:10])
-    print(Y[0:10])
+    #print(predictions[0:10])
+    #print(Y[0:10])
     print(" the number of prediction errors are {}".format(counter))
+    print("accuracy = {}%".format(1 - counter/X.shape[0]) )
 
 
 if __name__ == "__main__":
 
-    input_shape =188
-    layers = 30
+    input_shape =187
+    layers = 60
     batchsize = 100
     epoch = 200
 
@@ -61,8 +62,8 @@ if __name__ == "__main__":
 
     X_train,Y_train = X[0:10000],Y[0:10000]
     X_test, Y_test = X[10000:],Y[10000:]
-    #print(type(X[0,1]))
+
     #savefile(Xtrain = X, Ytrain = Y)
-    model = model1(187,20)
+    model = model1(input_shape,layers)
     train_data(model, X_train, Y_train)
     predict(model,X_test,Y_test)
