@@ -19,6 +19,8 @@ def getxandy(*args):
         y = np.ones((arg.shape[0],))*idx
         Y.append(y)
     Y = np.concatenate((Y), axis = 0)
+    X = X[:,:-1]
+    print(X.shape)
     return X,Y
 
 def savefile(**kwargs):
@@ -26,7 +28,7 @@ def savefile(**kwargs):
         np.save(key+".npy",File)
 
 def train_data(model, X, Y):
-    opt = keras.optimizers.Adam(learning_rate=0.000003)
+    opt = keras.optimizers.Adam(learning_rate=0.000001)
     model.compile(optimizer=opt,
                   loss=tf.keras.losses.BinaryCrossentropy(),
                   metrics=['accuracy'])
@@ -48,9 +50,9 @@ def predict(model,X,Y):
 if __name__ == "__main__":
 
     input_shape =188
-    layers = 20
+    layers = 30
     batchsize = 100
-    epoch = 30
+    epoch = 200
 
     normal = getdata("ptbdb_normal.csv")
     abnormal = getdata("ptbdb_abnormal.csv")
@@ -61,6 +63,6 @@ if __name__ == "__main__":
     X_test, Y_test = X[10000:],Y[10000:]
     #print(type(X[0,1]))
     #savefile(Xtrain = X, Ytrain = Y)
-    model = model1(188,20)
+    model = model1(187,20)
     train_data(model, X_train, Y_train)
     predict(model,X_test,Y_test)
