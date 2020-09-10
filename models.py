@@ -7,7 +7,7 @@ def model1(input_shape, layers):
     X = X_in
     for i in range(input_shape,0,-(input_shape//layers)):
         X = Dense(i)(X)
-        Y = Dense(1)(X)
+        Y = Dense(1, activation='sigmoid')(X)
     model = Model(inputs = X_in, outputs = Y, name='basic1')
     #model.summary()
     return model

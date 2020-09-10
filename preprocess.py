@@ -9,9 +9,7 @@ from numpy import genfromtxt
 
 def getdata(filename):
     File = open(filename)
-    #data = np.array(list(csv.reader(File)))
     data = genfromtxt(filename, delimiter=",")
-    #print(data.shape)
     return data
 
 def getxandy(*args):
@@ -34,19 +32,24 @@ def train_data(model, X, Y):
                   metrics=['accuracy'])
     model.fit(X,Y, epochs=epoch, batch_size=batchsize)
 
+def predict(X,Y):
+    
 
 if __name__ == "__main__":
 
     input_shape =188
     layers = 20
     batchsize = 100
-    epoch = 500
+    epoch = 200
 
     normal = getdata("ptbdb_normal.csv")
     abnormal = getdata("ptbdb_abnormal.csv")
     X,Y = getxandy(normal,abnormal)
     X,Y = shuffle(X,Y)
-    print(type(X[0,1]))
+
+    X_train,Y_train = X[0:10000],Y[0:10000]
+    X_test, Y_test = X[10000:],Y[10000:]
+    #print(type(X[0,1]))
     #savefile(Xtrain = X, Ytrain = Y)
     model = model1(188,20)
-    train_data(model, X, Y)
+    train_data(model, X_train, Y_train)
