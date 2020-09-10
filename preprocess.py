@@ -5,10 +5,13 @@ from sklearn.utils import shuffle
 from models import *
 import keras
 import tensorflow as tf
+from numpy import genfromtxt
 
 def getdata(filename):
     File = open(filename)
-    data = np.array(list(csv.reader(File)))
+    #data = np.array(list(csv.reader(File)))
+    data = genfromtxt(filename, delimiter=",")
+    #print(data.shape)
     return data
 
 def getxandy(*args):
@@ -27,7 +30,7 @@ def savefile(**kwargs):
 def train_data(model, X, Y):
     opt = keras.optimizers.Adam(learning_rate=0.000003)
     model.compile(optimizer=opt,
-                  loss=tf.keras.losses.SparseCategoricalCrossentropy(),
+                  loss=tf.keras.losses.BinaryCrossentropy(),
                   metrics=['accuracy'])
     model.fit(X,Y, epochs=epoch, batch_size=batchsize)
 
@@ -36,8 +39,8 @@ if __name__ == "__main__":
 
     input_shape =188
     layers = 20
-    batchsize = 32
-    epoch = 100
+    batchsize = 100
+    epoch = 500
 
     normal = getdata("ptbdb_normal.csv")
     abnormal = getdata("ptbdb_abnormal.csv")
@@ -46,4 +49,4 @@ if __name__ == "__main__":
     print(type(X[0,1]))
     #savefile(Xtrain = X, Ytrain = Y)
     model = model1(188,20)
-    #train_data(model, X, Y)
+    train_data(model, X, Y)
