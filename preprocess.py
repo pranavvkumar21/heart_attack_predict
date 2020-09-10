@@ -32,15 +32,25 @@ def train_data(model, X, Y):
                   metrics=['accuracy'])
     model.fit(X,Y, epochs=epoch, batch_size=batchsize)
 
-def predict(X,Y):
-    
+def predict(model,X,Y):
+    print(X.shape)
+    predictions = model.predict(X)
+    counter = 0
+    for idx,val in enumerate(predictions):
+        if val > 0.5: predictions[idx] = 1
+        else: predictions[idx] = 0
+        if Y[idx] != predictions[idx]: counter +=1
+    print(predictions[0:10])
+    print(Y[0:10])
+    print(" the number of prediction errors are {}".format(counter))
+
 
 if __name__ == "__main__":
 
     input_shape =188
     layers = 20
     batchsize = 100
-    epoch = 200
+    epoch = 30
 
     normal = getdata("ptbdb_normal.csv")
     abnormal = getdata("ptbdb_abnormal.csv")
@@ -53,3 +63,4 @@ if __name__ == "__main__":
     #savefile(Xtrain = X, Ytrain = Y)
     model = model1(188,20)
     train_data(model, X_train, Y_train)
+    predict(model,X_test,Y_test)
